@@ -1,19 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Style from "./Register.module.css";
 import { useFormik } from "formik";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import FormInput from "../FormInput/FormInput";
+import { UserContext } from "../../context/UserContext";
 
 export default function Register() {
   let navigate = useNavigate();
   let [loading, setLoading] = useState(false);
+  let [error, setError] = useState("");
+  let { setUser, setToken } = useContext(UserContext);
+  setUser(null);
+  setToken(null);
   let validationSchema = Yup.object().shape({
     name: Yup.string()
       .matches(
         /^[A-Z][a-zA-Z]{2,10}$/,
-        "Name must start with uppercase,At least 3 characters (and up to 10 characters),no numbers or special character"
+        "Name must start with uppercase,At least 3 characters (and up to 10 characters),no numbers or special character or spaces"
       )
       .required("name is required"),
     email: Yup.string().email("email is unvalid").required("email is required"),
@@ -25,27 +30,30 @@ export default function Register() {
       .required("phone number is required"),
     password: Yup.string()
       .matches(
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-        "Minimum eight characters,at least one letter,one number and one special character"
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,20}$/,
+        "Minimum eight characters,at least one letter and one number and one special character , At least 8 characters (and up to 20 characters)"
       )
       .required("password is required"),
     rePassword: Yup.string()
       .oneOf([Yup.ref("password")], "repassword must match the password")
       .required("repassword is required"),
   });
-  async function handelRegister(formData) {
+  function handelRegister(formData) {
     console.log(formData);
     setLoading(true);
-    let { data } = await axios.post(
-      "https://ecommerce.routemisr.com/api/v1/auth/signup",
-      formData
-    );
-    setLoading(false);
-
-    if (data.message == "success") {
-      navigate("/home");
-    }
-    console.log(data);
+    axios
+      .post("https://ecommerce.routemisr.com/api/v1/auth/signup", formData)
+      .then(({ data }) => {
+        if (data.message == "success") {
+          setError("");
+          setLoading(false);
+          navigate("/home");
+        }
+      })
+      .catch((error) => {
+        setError(error.response?.data?.message);
+        setLoading(false);
+      });
   }
   let formik = useFormik({
     initialValues: {
@@ -60,6 +68,51 @@ export default function Register() {
   });
   return (
     <div className="max-w-xl mx-auto py-5 px-5">
+      <div
+        id="alert-2"
+        className={`${
+          error == ""
+            ? "duration-0 invisible opacity-0 -top-20"
+            : " duration-700 top-0 opacity-100 visible"
+        } flex transition-all  relative items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400`}
+        role="alert"
+      >
+        <svg
+          className="flex-shrink-0 w-4 h-4"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+        </svg>
+        <span className="sr-only">Info</span>
+        <div className="ms-3 text-sm font-medium">{error}</div>
+        <button
+          type="button"
+          className="ms-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"
+          data-dismiss-target="#alert-2"
+          aria-label="Close"
+          onClick={() => setError("")}
+        >
+          <span className="sr-only">Close</span>
+          <svg
+            className="w-3 h-3"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 14 14"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+            />
+          </svg>
+        </button>
+      </div>
       <h2 className="font-bold text-center capitalize mb-2 text-3xl text-green-500">
         register now
       </h2>

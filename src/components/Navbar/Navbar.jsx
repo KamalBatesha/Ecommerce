@@ -1,10 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Style from "./Navbar.module.css";
 import logo from "../../assets/imgs/logo-main.png";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { UserContext } from "../../context/UserContext";
 
 export default function Navbar() {
   const [show, setshow] = useState(false);
+  let { user, token, setUser, setToken } = useContext(UserContext);
+  let navigate = useNavigate();
+
+  function logout() {
+    localStorage.removeItem("userName");
+    localStorage.removeItem("token");
+    setUser(null);
+    setToken(null);
+    navigate("login");
+  }
   return (
     <nav
       className={`fixed top-0 left-0 right-0 bg-gray-100 py-2 lg:h-fit overflow-hidden ${
@@ -23,46 +34,50 @@ export default function Navbar() {
             </div>
           </div>
           <ul className=" flex flex-col lg:flex-row items-center">
-            <li className="mx-2 py-2 lg:py-0">
-              <NavLink
-                className="capitalize text-lg text-slate-900 font-light"
-                to="categories"
-              >
-                categories
-              </NavLink>
-            </li>
-            <li className="mx-2 py-2 lg:py-0">
-              <NavLink
-                className="capitalize text-lg text-slate-900 font-light"
-                to="brands"
-              >
-                brands
-              </NavLink>
-            </li>
-            <li className="mx-2 py-2 lg:py-0">
-              <NavLink
-                className="capitalize text-lg text-slate-900 font-light"
-                to="cart"
-              >
-                cart
-              </NavLink>
-            </li>
-            <li className="mx-2 py-2 lg:py-0">
-              <NavLink
-                className="capitalize text-lg text-slate-900 font-light"
-                to="home"
-              >
-                home
-              </NavLink>
-            </li>
-            <li className="mx-2 py-2 lg:py-0">
-              <NavLink
-                className="capitalize text-lg text-slate-900 font-light"
-                to="products"
-              >
-                products
-              </NavLink>
-            </li>
+            {token != null ? (
+              <>
+                <li className="mx-2 py-2 lg:py-0">
+                  <NavLink
+                    className="capitalize text-lg text-slate-900 font-light"
+                    to="categories"
+                  >
+                    categories
+                  </NavLink>
+                </li>
+                <li className="mx-2 py-2 lg:py-0">
+                  <NavLink
+                    className="capitalize text-lg text-slate-900 font-light"
+                    to="brands"
+                  >
+                    brands
+                  </NavLink>
+                </li>
+                <li className="mx-2 py-2 lg:py-0">
+                  <NavLink
+                    className="capitalize text-lg text-slate-900 font-light"
+                    to="cart"
+                  >
+                    cart
+                  </NavLink>
+                </li>
+                <li className="mx-2 py-2 lg:py-0">
+                  <NavLink
+                    className="capitalize text-lg text-slate-900 font-light"
+                    to="home"
+                  >
+                    home
+                  </NavLink>
+                </li>
+                <li className="mx-2 py-2 lg:py-0">
+                  <NavLink
+                    className="capitalize text-lg text-slate-900 font-light"
+                    to="products"
+                  >
+                    products
+                  </NavLink>
+                </li>
+              </>
+            ) : null}
           </ul>
         </div>
         <ul className=" flex flex-col lg:flex-row items-center">
@@ -72,26 +87,41 @@ export default function Navbar() {
             <i className="fab mx-1 fa-instagram"></i>
             <i className="fab mx-1 fa-youtube"></i>
           </li>
-          <li className="mx-2 py-2 lg:py-0">
-            <NavLink
-              className="capitalize text-lg text-slate-900 font-light"
-              to=""
-            >
-              login
-            </NavLink>
-          </li>
-          <li className="mx-2 py-2 lg:py-0">
-            <NavLink
-              className="capitalize text-lg text-slate-900 font-light"
-              to="register"
-            >
-              register
-            </NavLink>
-          </li>
-          <li className="mx-2 py-2 lg:py-0">
-            <NavLink className="capitalize text-lg text-slate-900 font-light">
-              logout
-            </NavLink>
+          {token === null ? (
+            <>
+              <li className="mx-2 py-2 lg:py-0">
+                <NavLink
+                  className="capitalize text-lg text-slate-900 font-light"
+                  to=""
+                >
+                  login
+                </NavLink>
+              </li>
+              <li className="mx-2 py-2 lg:py-0">
+                <NavLink
+                  className="capitalize text-lg text-slate-900 font-light"
+                  to="register"
+                >
+                  register
+                </NavLink>
+              </li>
+            </>
+          ) : null}
+          {token != null ? (
+            <li className="mx-2 py-2 lg:py-0">
+              <NavLink
+                className="capitalize text-lg  text-green-500 font-bold"
+                to="#"
+              >
+                kamal
+              </NavLink>
+            </li>
+          ) : null}
+          <li
+            onClick={logout}
+            className="mx-2 py-2 lg:py-0 capitalize text-lg text-slate-900 font-light cursor-pointer"
+          >
+            logout
           </li>
         </ul>
       </div>

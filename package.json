@@ -13,6 +13,7 @@
     "@fortawesome/fontawesome-free": "^6.6.0",
     "axios": "^1.7.3",
     "flowbite": "^2.5.1",
+    "flowbite-react": "^0.10.1",
     "formik": "^2.4.6",
     "generate-react-cli": "^8.4.8",
     "react": "^18.3.1",

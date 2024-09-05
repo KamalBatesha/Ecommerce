@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Style from "./Notfound.module.css";
-import img from "../../404.png";
+import img from "../../assets/404.png";
 
 export default function Notfound() {
   return (

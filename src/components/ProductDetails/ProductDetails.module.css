@@ -1,0 +1,5 @@
+.dots li{
+    /* width: 20% !important; */
+    flex-grow: 1 !important;
+    margin: 0 !important;
+}

@@ -14,6 +14,7 @@ export default function FormInput(props) {
           onChange={props.handleChange}
           onBlur={props.handleBlur}
           value={props.values}
+          list={props.list}
         />
         <label
           htmlFor={props.name}

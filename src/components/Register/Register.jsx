@@ -6,14 +6,18 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import FormInput from "../FormInput/FormInput";
 import { UserContext } from "../../context/UserContext";
+import { Helmet } from "react-helmet";
 
 export default function Register() {
   let navigate = useNavigate();
   let [loading, setLoading] = useState(false);
   let [error, setError] = useState("");
-  let { setUser, setToken } = useContext(UserContext);
-  setUser(null);
-  setToken(null);
+  let { setUser, setToken, getUserId, setUserId } = useContext(UserContext);
+  useEffect(() => {
+    setUser(null);
+    setToken(null);
+    setUserId(null);
+  }, []);
   let validationSchema = Yup.object().shape({
     name: Yup.string()
       .matches(
@@ -47,6 +51,13 @@ export default function Register() {
         if (data.message == "success") {
           setError("");
           setLoading(false);
+          console.log(data);
+
+          setUser(data.user.name);
+          setToken(data.token);
+          localStorage.setItem("userName", data.user.name);
+          localStorage.setItem("token", data.token);
+          setUserId(getUserId);
           navigate("/home");
         }
       })
@@ -68,6 +79,9 @@ export default function Register() {
   });
   return (
     <div className="max-w-xl mx-auto py-5 px-5">
+      <Helmet>
+        <title>register</title>
+      </Helmet>
       <div
         id="alert-2"
         className={`${

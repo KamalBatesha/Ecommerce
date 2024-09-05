@@ -2,17 +2,21 @@ import React, { useContext, useEffect, useState } from "react";
 import Style from "./Login.module.css";
 import { useFormik } from "formik";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FormInput from "../FormInput/FormInput";
 import { UserContext } from "../../context/UserContext";
+import { Helmet } from "react-helmet";
 
 export default function Login() {
   let navigate = useNavigate();
   let [loading, setLoading] = useState(false);
   let [error, setError] = useState("");
-  let { setUser, setToken } = useContext(UserContext);
-  setUser(null);
-  setToken(null);
+  let { setUser, setToken, getUserId, setUserId } = useContext(UserContext);
+  useEffect(() => {
+    setUser(null);
+    setToken(null);
+    setUserId(null);
+  }, []);
   function handelLogin(formData) {
     setLoading(true);
     axios
@@ -24,6 +28,7 @@ export default function Login() {
           setToken(data.token);
           localStorage.setItem("userName", data.user.name);
           localStorage.setItem("token", data.token);
+          setUserId(getUserId);
           setError("");
           setLoading(false);
           navigate("/home");
@@ -44,6 +49,9 @@ export default function Login() {
   });
   return (
     <div className="max-w-xl mx-auto py-5 px-5">
+      <Helmet>
+        <title>login</title>
+      </Helmet>
       <div
         id="alert-2"
         className={`${
@@ -144,6 +152,7 @@ export default function Login() {
             "login"
           )}
         </button>
+        <Link to="/forgetPassword">forget password?</Link>
       </form>
     </div>
   );

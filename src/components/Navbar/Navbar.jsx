@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import Style from "./Navbar.module.css";
-import logo from "../../assets/imgs/logo-main.png";
+import logo from "../../assets/logo-main.png";
 import { NavLink, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
+import { cartContext } from "../../context/CartContext";
 
 export default function Navbar() {
   const [show, setshow] = useState(false);
   let { user, token, setUser, setToken } = useContext(UserContext);
+  let { cartNum } = useContext(cartContext);
   let navigate = useNavigate();
 
   function logout() {
@@ -14,11 +16,11 @@ export default function Navbar() {
     localStorage.removeItem("token");
     setUser(null);
     setToken(null);
-    navigate("login");
+    navigate("/");
   }
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 bg-gray-100 py-2 lg:h-fit overflow-hidden ${
+      className={`fixed z-40 top-0 left-0 right-0 bg-gray-100 py-2 lg:h-fit overflow-hidden ${
         show ? "h-fit" : "h-[50px]"
       }`}
     >
@@ -47,6 +49,14 @@ export default function Navbar() {
                 <li className="mx-2 py-2 lg:py-0">
                   <NavLink
                     className="capitalize text-lg text-slate-900 font-light"
+                    to="wishList"
+                  >
+                    wish List
+                  </NavLink>
+                </li>
+                <li className="mx-2 py-2 lg:py-0">
+                  <NavLink
+                    className="capitalize text-lg text-slate-900 font-light"
                     to="brands"
                   >
                     brands
@@ -58,6 +68,14 @@ export default function Navbar() {
                     to="cart"
                   >
                     cart
+                  </NavLink>
+                </li>
+                <li className="mx-2 py-2 lg:py-0">
+                  <NavLink
+                    className="capitalize text-lg text-slate-900 font-light"
+                    to="allorders"
+                  >
+                    all orders
                   </NavLink>
                 </li>
                 <li className="mx-2 py-2 lg:py-0">
@@ -106,23 +124,33 @@ export default function Navbar() {
                 </NavLink>
               </li>
             </>
-          ) : null}
-          {token != null ? (
-            <li className="mx-2 py-2 lg:py-0">
-              <NavLink
-                className="capitalize text-lg  text-green-500 font-bold"
-                to="#"
+          ) : (
+            <>
+              <li className="mx-2 py-2 lg:py-0">
+                <NavLink
+                  className="capitalize text-lg  text-green-500 font-bold"
+                  to="#"
+                >
+                  {user}
+                </NavLink>
+              </li>
+              <li className="mx-2 py-2 lg:py-0">
+                <NavLink
+                  className="capitalize text-lg  text-green-500 font-bold"
+                  to="/cart"
+                >
+                  <i className="fas fa-cart-shopping"></i>
+                  {cartNum}
+                </NavLink>
+              </li>
+              <li
+                onClick={logout}
+                className="mx-2 py-2 lg:py-0 capitalize text-lg text-slate-900 font-light cursor-pointer"
               >
-                kamal
-              </NavLink>
-            </li>
-          ) : null}
-          <li
-            onClick={logout}
-            className="mx-2 py-2 lg:py-0 capitalize text-lg text-slate-900 font-light cursor-pointer"
-          >
-            logout
-          </li>
+                logout
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </nav>

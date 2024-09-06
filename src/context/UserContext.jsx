@@ -30,12 +30,14 @@ export default function UserContextProvider(props) {
       })
       .then((res) => res);
   }
-  function resetPassword({ email, newPassword }) {
+  function resetPassword(formData) {
+    console.log(formData);
+
     return axios
-      .put("https://ecommerce.routemisr.com/api/v1/auth/forgotPasswords", {
-        email,
-        newPassword,
-      })
+      .put(
+        "https://ecommerce.routemisr.com/api/v1/auth/resetPassword",
+        formData
+      )
       .then((res) => res);
   }
   useEffect(() => {

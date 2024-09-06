@@ -5,6 +5,7 @@ import axios from "axios";
 import { cartContext } from "../../context/CartContext";
 import toast from "react-hot-toast";
 import { productsContext } from "../../context/productsContext";
+import { HashLoader } from "react-spinners";
 
 export default function CommonProducts() {
   let [cartLoading, setCartLoadin] = useState(false);
@@ -46,6 +47,24 @@ export default function CommonProducts() {
       toast.error("out of stock");
     }
     setCartLoadin(false);
+  }
+  if (allProducts.length == 0) {
+    return (
+      <div>
+        <HashLoader
+          size={200}
+          color="rgb(14 159 110)"
+          style={{
+            display: "inherit",
+            position: "relative",
+            height: "100px",
+            width: "100%",
+            transform: "rotate(165deg)",
+            margin: "100px 0 50px",
+          }}
+        />
+      </div>
+    );
   }
   return (
     <div className="pt-7">

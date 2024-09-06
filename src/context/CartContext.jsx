@@ -1,9 +1,9 @@
 import axios from "axios";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 export let cartContext = createContext();
 
-const headers = {
+let headers = {
   token: localStorage.getItem("token"),
 };
 
@@ -12,8 +12,12 @@ export default function CartContextProvider({ children }) {
   let [cartNum, setCartNum] = useState(0);
   useEffect(() => {
     getCartDataNum();
-  }, []);
+    headers = {
+      token: localStorage.getItem("token"),
+    };
+  }, [localStorage.getItem("token")]);
   function addToCart(productId) {
+    // console.log(productId);
     return axios
       .post(
         "https://ecommerce.routemisr.com/api/v1/cart",

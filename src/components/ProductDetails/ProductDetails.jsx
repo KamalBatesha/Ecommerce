@@ -8,6 +8,7 @@ import { cartContext } from "../../context/CartContext";
 import toast from "react-hot-toast";
 import { productsContext } from "../../context/productsContext";
 import { Helmet } from "react-helmet";
+import { HashLoader } from "react-spinners";
 
 export default function ProductDetails() {
   let [cartLoading, setCartLoading] = useState(false);
@@ -109,6 +110,24 @@ export default function ProductDetails() {
       </div>
     ),
   };
+  if (data == null) {
+    return (
+      <div>
+        <HashLoader
+          size={200}
+          color="rgb(14 159 110)"
+          style={{
+            display: "inherit",
+            position: "relative",
+            height: "100px",
+            width: "100%",
+            transform: "rotate(165deg)",
+            margin: "100px 0 50px",
+          }}
+        />
+      </div>
+    );
+  }
   return (
     <div className="row items-stretch w-4/5 mx-auto">
       {data ? (

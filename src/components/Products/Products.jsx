@@ -6,6 +6,7 @@ import ProductItem from "../ProductItem/ProductItem";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Helmet } from "react-helmet";
+import { HashLoader } from "react-spinners";
 
 export default function Products() {
   let [cartLoading, setCartLoadin] = useState(false);
@@ -92,6 +93,24 @@ export default function Products() {
     }
 
     setFilterProducts(newFilter);
+  }
+  if (allProducts.length == 0) {
+    return (
+      <div>
+        <HashLoader
+          size={200}
+          color="rgb(14 159 110)"
+          style={{
+            display: "inherit",
+            position: "relative",
+            height: "100px",
+            width: "100%",
+            transform: "rotate(165deg)",
+            margin: "100px 0 50px",
+          }}
+        />
+      </div>
+    );
   }
 
   return (

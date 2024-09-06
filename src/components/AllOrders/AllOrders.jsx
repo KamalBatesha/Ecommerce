@@ -4,6 +4,7 @@ import { UserContext } from "../../context/UserContext";
 import { cartContext } from "../../context/CartContext";
 import { Accordion } from "flowbite-react";
 import CartItem from "../CartItem/CartItem";
+import { HashLoader } from "react-spinners";
 
 export default function AllOrders() {
   let { userId } = useContext(UserContext);
@@ -28,7 +29,22 @@ export default function AllOrders() {
   }
 
   if (orders == null) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <HashLoader
+          size={200}
+          color="rgb(14 159 110)"
+          style={{
+            display: "inherit",
+            position: "relative",
+            height: "100px",
+            width: "100%",
+            transform: "rotate(165deg)",
+            margin: "100px 0 50px",
+          }}
+        />
+      </div>
+    );
   } else if (orders == "empty") {
     return <div>No orders found</div>;
   } else {

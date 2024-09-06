@@ -4,6 +4,7 @@ import { cartContext } from "../../context/CartContext";
 import { Link, useNavigate } from "react-router-dom";
 import CartItem from "../CartItem/CartItem";
 import { Helmet } from "react-helmet";
+import { HashLoader } from "react-spinners";
 
 export default function Cart() {
   let {
@@ -58,7 +59,22 @@ export default function Cart() {
   }
 
   if (cartData == null) {
-    return <i className="fas fa-spinner fa-spin"></i>;
+    return (
+      <div>
+        <HashLoader
+          size={200}
+          color="rgb(14 159 110)"
+          style={{
+            display: "inherit",
+            position: "relative",
+            height: "100px",
+            width: "100%",
+            transform: "rotate(165deg)",
+            margin: "100px 0 50px",
+          }}
+        />
+      </div>
+    );
   }
 
   return (

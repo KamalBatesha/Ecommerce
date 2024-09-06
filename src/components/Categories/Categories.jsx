@@ -3,6 +3,7 @@ import Style from "./Categories.module.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { HashLoader } from "react-spinners";
 
 export default function Categories() {
   let [categorys, setCategorys] = useState([]);
@@ -17,6 +18,24 @@ export default function Categories() {
         setCategorys(data.data);
         console.log(data.data);
       });
+  }
+  if (categorys.length == 0) {
+    return (
+      <div>
+        <HashLoader
+          size={200}
+          color="rgb(14 159 110)"
+          style={{
+            display: "inherit",
+            position: "relative",
+            height: "100px",
+            width: "100%",
+            transform: "rotate(165deg)",
+            margin: "100px 0 50px",
+          }}
+        />
+      </div>
+    );
   }
   return (
     <div className="row">

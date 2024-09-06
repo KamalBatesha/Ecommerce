@@ -3,6 +3,7 @@ import Style from "./ResetPassword.module.css";
 import { useFormik } from "formik";
 import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import FormInput from "../FormInput/FormInput";
 
 export default function ResetPassword() {
   let [isCodeTrue, setIsCodeTrue] = useState(false);
@@ -14,17 +15,17 @@ export default function ResetPassword() {
     let response = await verityPassword(value);
     console.log(response);
 
-    if (response.data.status == "success") {
+    if (response.data.status == "Success") {
       setIsCodeTrue(true);
     }
   }
 
   async function handelResetPassword(formData) {
-    console.log(value);
+    console.log(formData);
     let response = await resetPassword(formData);
     console.log(response);
 
-    if (response.data.status == "success") {
+    if (response.data.token) {
       navigate("/");
     }
   }
@@ -37,33 +38,34 @@ export default function ResetPassword() {
     onSubmit: handelResetPassword,
   });
   if (isCodeTrue) {
-    <form onSubmit={formik.handleSubmit}>
-      <FormInput
-        name="email"
-        handleChange={formik.handleChange}
-        handleBlur={formik.handleBlur}
-        value={formik.values.email}
-        text="enter your email address :"
-        type="email"
-      />
+    return (
+      <form onSubmit={formik.handleSubmit}>
+        <FormInput
+          name="email"
+          handleChange={formik.handleChange}
+          handleBlur={formik.handleBlur}
+          value={formik.values.email}
+          text="enter your email address :"
+          type="email"
+        />
 
-      <FormInput
-        name="newPassword"
-        handleChange={formik.handleChange}
-        handleBlur={formik.handleBlur}
-        value={formik.values.password}
-        type="password"
-        text="enter your newPassword :"
-      />
+        <FormInput
+          name="newPassword"
+          handleChange={formik.handleChange}
+          handleBlur={formik.handleBlur}
+          value={formik.values.newPassword}
+          type="password"
+          text="enter your newPassword :"
+        />
 
-      <button
-        type="submit"
-        className={` mx-auto block text-white bg-green-700 ${"hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:hover:bg-green-700 dark:focus:ring-green-800"}  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-600 `}
-        disabled={loading}
-      >
-        reset
-      </button>
-    </form>;
+        <button
+          type="submit"
+          className={` mx-auto block text-white bg-green-700 ${"hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:hover:bg-green-700 dark:focus:ring-green-800"}  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-600 `}
+        >
+          reset
+        </button>
+      </form>
+    );
   }
   return (
     <div>

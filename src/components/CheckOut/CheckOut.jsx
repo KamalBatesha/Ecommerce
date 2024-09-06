@@ -15,7 +15,7 @@ export default function CheckOut() {
   let [error, setError] = useState("");
   let [payOnline, setPayOnline] = useState(false);
   let { cartId } = useParams();
-  let { checkOut } = useContext(cartContext);
+  let { checkOut, getCartDataNum } = useContext(cartContext);
   let navigate = useNavigate();
   const cities = [
     "Cairo",
@@ -111,6 +111,7 @@ export default function CheckOut() {
 
     console.log(formData);
     console.log(response);
+    getCartDataNum();
   }
   let formik = useFormik({
     initialValues: {

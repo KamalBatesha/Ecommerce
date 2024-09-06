@@ -77,6 +77,7 @@ export default function CartContextProvider({ children }) {
       .catch((res) => res);
   }
   function checkOut(url, shippingAddress) {
+    getCartDataNum();
     return axios
       .post(url, { shippingAddress }, { headers })
       .then((res) => res)
